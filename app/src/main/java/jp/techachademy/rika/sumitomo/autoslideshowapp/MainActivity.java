@@ -25,6 +25,9 @@ public class MainActivity extends AppCompatActivity  {
     private Cursor mCursor;
     Timer mTimer;
     private Handler mHandler = new Handler();
+    private Button button1;
+    private Button button2;
+    private Button button3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,12 +108,18 @@ public class MainActivity extends AppCompatActivity  {
 
     private void imageAutoNext(){
 
-        if (mTimer != null) {
+        if (mTimer != null) { //mTimerがnullでない
+            //自動切り替え中
 
             mTimer.cancel();
-            mTimer = null;
+            mTimer = null; //停止している状態
+            button2.setText("再生する");
+            button1.setEnabled(true);
+            button3.setEnabled(true);
 
         }else{
+            //自動切り替え中でない
+
             mTimer = new Timer();
             mTimer.schedule(new TimerTask() {
                 @Override
@@ -118,12 +127,16 @@ public class MainActivity extends AppCompatActivity  {
                     mHandler.post(new Runnable() {
                         @Override
                         public void run() {
-                            imageNext();
+                            imageNext(); //再生している状態
 
                         }
                     });
                 }
-            },300,300);
+            },2000,2000);
+            button2.setText("停止する");
+            button1.setEnabled(false);
+            button3.setEnabled(false);
+
         }
 
     }
@@ -142,9 +155,9 @@ public class MainActivity extends AppCompatActivity  {
 
     private void buttonInit(){
 
-        Button button1 = (Button)findViewById(R.id.go);
-        Button button2 = (Button)findViewById(R.id.stop);
-        Button button3 = (Button)findViewById(R.id.back);
+        button1 = (Button)findViewById(R.id.go);
+        button2 = (Button)findViewById(R.id.stop);
+        button3 = (Button)findViewById(R.id.back);
 
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
