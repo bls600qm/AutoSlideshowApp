@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity  {
 
     private static final int PERMISSIONS_REQUEST_CODE = 100;
 
+    private Cursor mCursor;
 
 
     @Override
@@ -27,8 +28,6 @@ public class MainActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_main);
 
         buttonInit();
-
-
 
         // Android 6.0以降の場合
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -63,7 +62,7 @@ public class MainActivity extends AppCompatActivity  {
 
         // 画像の情報を取得する
         ContentResolver resolver = getContentResolver();
-        Cursor cursor = resolver.query(
+        mCursor = resolver.query(
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI, // データの種類
                 null, // 項目(null = 全項目)
                 null, // フィルタ条件(null = フィルタなし)
@@ -71,22 +70,28 @@ public class MainActivity extends AppCompatActivity  {
                 null // ソート (null ソートなし)
         );
 
-        if (cursor.moveToFirst()) {
+        if (mCursor.moveToFirst()) {
             do {
-                // indexからIDを取得し、そのIDから画像のURIを取得する
-                int fieldIndex = cursor.getColumnIndex(MediaStore.Images.Media._ID);
-                Long id = cursor.getLong(fieldIndex);
+               
+               imageShow();
+
+            } while (mCursor.moveToNext());
+        }
+        mCursor.close();
+    }
+
+
+
+    private void imageShow() {
+
+                int fieldIndex = mCursor.getColumnIndex(MediaStore.Images.Media._ID);
+                Long id = mCursor.getLong(fieldIndex);
                 Uri imageUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id);
 
                 Log.d("ANDROID", "URI : " + imageUri.toString());
                 ImageView imageView = (ImageView) findViewById(R.id.imageView);
                 imageView.setImageURI(imageUri);
-
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
-    }
-
+            }
 
     private void buttonInit(){
 
