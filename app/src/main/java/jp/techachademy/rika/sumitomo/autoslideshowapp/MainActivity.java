@@ -72,12 +72,12 @@ public class MainActivity extends AppCompatActivity  {
 
         if (mCursor.moveToFirst()) {
             do {
-               
+
                imageShow();
 
             } while (mCursor.moveToNext());
         }
-        mCursor.close();
+      //  mCursor.close();
     }
 
 
