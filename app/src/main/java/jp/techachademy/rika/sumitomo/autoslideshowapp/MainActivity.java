@@ -15,12 +15,13 @@ import android.widget.ImageView;
 import android.widget.Button;
 import android.view.View;
 
+
 public class MainActivity extends AppCompatActivity  {
 
     private static final int PERMISSIONS_REQUEST_CODE = 100;
 
     private Cursor mCursor;
-
+    //private Handler mHandler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +100,38 @@ public class MainActivity extends AppCompatActivity  {
         }
     }
 
+    /*private void imageAutoNext(){
+
+        andler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                //~~~
+            }
+        }, 500);
+        if(mCursor != null){
+            if (mCursor.isLast()) {
+                mCursor.moveToFirst();
+            }else{
+                mCursor.moveToNext();
+            }
+            imageShow();
+
+        }
+    }
+    */
+
+    private void imagePrev(){
+        if(mCursor !=null){
+            if (mCursor.isFirst()) {
+                mCursor.moveToLast();
+            }else{
+                mCursor.moveToPrevious();
+            }
+            imageShow();
+        }
+    }
+
+
     private void buttonInit(){
 
         Button button1 = (Button)findViewById(R.id.go);
@@ -115,6 +148,7 @@ public class MainActivity extends AppCompatActivity  {
         button2.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
+
                 Log.d("STOP","再生/一時停止ボタンをタップしました");
             }
         });
@@ -122,6 +156,7 @@ public class MainActivity extends AppCompatActivity  {
             @Override
             public void onClick(View v){
                 Log.d("BACK","戻るボタンをタップしました");
+                imagePrev();
             }
         });
 
