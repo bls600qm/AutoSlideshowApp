@@ -71,27 +71,33 @@ public class MainActivity extends AppCompatActivity  {
         );
 
         if (mCursor.moveToFirst()) {
-            do {
-
-               imageShow();
-
-            } while (mCursor.moveToNext());
+            imageShow();
         }
-      //  mCursor.close();
+
     }
 
 
 
     private void imageShow() {
 
-                int fieldIndex = mCursor.getColumnIndex(MediaStore.Images.Media._ID);
-                Long id = mCursor.getLong(fieldIndex);
-                Uri imageUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id);
+        int fieldIndex = mCursor.getColumnIndex(MediaStore.Images.Media._ID);
+        Long id = mCursor.getLong(fieldIndex);
+        Uri imageUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id);
 
-                Log.d("ANDROID", "URI : " + imageUri.toString());
-                ImageView imageView = (ImageView) findViewById(R.id.imageView);
-                imageView.setImageURI(imageUri);
+        Log.d("ANDROID", "URI : " + imageUri.toString());
+        ImageView imageView = (ImageView) findViewById(R.id.imageView);
+        imageView.setImageURI(imageUri);
+    }
+    private void imageNext(){
+        if(mCursor != null){
+            if (mCursor.isLast()) {
+                mCursor.moveToFirst();
+            }else{
+                mCursor.moveToNext();
             }
+            imageShow();
+        }
+    }
 
     private void buttonInit(){
 
@@ -102,7 +108,8 @@ public class MainActivity extends AppCompatActivity  {
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("UI_PARTS", "ボタンをタップしました");
+                Log.d("GO", "進むボタンをタップしました");
+                imageNext();
             }
         });
         button2.setOnClickListener(new View.OnClickListener(){
@@ -119,5 +126,16 @@ public class MainActivity extends AppCompatActivity  {
         });
 
     }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+
+        if(mCursor != null){
+            mCursor.close();
+        }
+    }
+
+
 }
 
