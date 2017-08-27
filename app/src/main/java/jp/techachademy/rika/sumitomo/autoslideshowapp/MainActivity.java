@@ -19,33 +19,14 @@ public class MainActivity extends AppCompatActivity  {
 
     private static final int PERMISSIONS_REQUEST_CODE = 100;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button button1 = (Button)findViewById(R.id.go);
-        Button button2 = (Button)findViewById(R.id.stop);
-        Button button3 = (Button)findViewById(R.id.back);
-
-        button1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("UI_PARTS", "ボタンをタップしました");
-            }
-        });
-        button2.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                Log.d("STOP","再生/一時停止ボタンをタップしました");
-            }
-        });
-        button3.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                Log.d("BACK","戻るボタンをタップしました");
-            }
-        });
+        buttonInit();
 
 
 
@@ -91,24 +72,47 @@ public class MainActivity extends AppCompatActivity  {
         );
 
         if (cursor.moveToFirst()) {
-
             do {
                 // indexからIDを取得し、そのIDから画像のURIを取得する
                 int fieldIndex = cursor.getColumnIndex(MediaStore.Images.Media._ID);
                 Long id = cursor.getLong(fieldIndex);
-          //      Uri imageUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id);
+                Uri imageUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id);
 
                 Log.d("ANDROID", "URI : " + imageUri.toString());
-
-             //   ImageView imageView = (ImageView) findViewById(R.id.imageView);
-              //  imageView.setImageURI(imageUri);
-
+                ImageView imageView = (ImageView) findViewById(R.id.imageView);
+                imageView.setImageURI(imageUri);
 
             } while (cursor.moveToNext());
         }
-       cursor.close();
+        cursor.close();
     }
 
 
+    private void buttonInit(){
+
+        Button button1 = (Button)findViewById(R.id.go);
+        Button button2 = (Button)findViewById(R.id.stop);
+        Button button3 = (Button)findViewById(R.id.back);
+
+        button1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("UI_PARTS", "ボタンをタップしました");
+            }
+        });
+        button2.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Log.d("STOP","再生/一時停止ボタンをタップしました");
+            }
+        });
+        button3.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Log.d("BACK","戻るボタンをタップしました");
+            }
+        });
+
+    }
 }
 
