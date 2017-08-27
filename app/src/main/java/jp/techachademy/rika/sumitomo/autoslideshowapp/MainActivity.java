@@ -24,7 +24,6 @@ public class MainActivity extends AppCompatActivity  {
 
     private Cursor mCursor;
     Timer mTimer;
-    double mTimerSec = 0.0;
     private Handler mHandler = new Handler();
 
     @Override
@@ -105,20 +104,27 @@ public class MainActivity extends AppCompatActivity  {
     }
 
     private void imageAutoNext(){
-        mTimer = new Timer();
 
-        mTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        imageNext();
-                    }
-                });
-            }
-        },3000,3000);
+        if (mTimer != null) {
 
+            mTimer.cancel();
+            mTimer = null;
+
+        }else{
+            mTimer = new Timer();
+            mTimer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            imageNext();
+
+                        }
+                    });
+                }
+            },300,300);
+        }
 
     }
 
@@ -159,7 +165,7 @@ public class MainActivity extends AppCompatActivity  {
             public void onClick(View v){
                 Log.d("BACK","戻るボタンをタップしました");
                 imagePrev();
-                
+
             }
         });
 
