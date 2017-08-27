@@ -14,14 +14,18 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Button;
 import android.view.View;
-
+import android.os.Handler;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity  {
 
     private static final int PERMISSIONS_REQUEST_CODE = 100;
 
     private Cursor mCursor;
-    //private Handler mHandler = new Handler();
+    Timer mTimer;
+    double mTimerSec = 0.0;
+    private Handler mHandler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,25 +104,23 @@ public class MainActivity extends AppCompatActivity  {
         }
     }
 
-    /*private void imageAutoNext(){
+    private void imageAutoNext(){
+        mTimer = new Timer();
 
-        andler.postDelayed(new Runnable() {
+        mTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-                //~~~
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        imageNext();
+                    }
+                });
             }
-        }, 500);
-        if(mCursor != null){
-            if (mCursor.isLast()) {
-                mCursor.moveToFirst();
-            }else{
-                mCursor.moveToNext();
-            }
-            imageShow();
+        },3000,3000);
 
-        }
+
     }
-    */
 
     private void imagePrev(){
         if(mCursor !=null){
@@ -148,8 +150,8 @@ public class MainActivity extends AppCompatActivity  {
         button2.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-
                 Log.d("STOP","再生/一時停止ボタンをタップしました");
+                imageAutoNext();
             }
         });
         button3.setOnClickListener(new View.OnClickListener(){
@@ -157,6 +159,7 @@ public class MainActivity extends AppCompatActivity  {
             public void onClick(View v){
                 Log.d("BACK","戻るボタンをタップしました");
                 imagePrev();
+                
             }
         });
 
