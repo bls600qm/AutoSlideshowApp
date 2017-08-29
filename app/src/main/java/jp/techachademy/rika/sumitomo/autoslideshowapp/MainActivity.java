@@ -18,6 +18,8 @@ import android.os.Handler;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import android.support.v7.app.AlertDialog;
+
 public class MainActivity extends AppCompatActivity  {
 
     private static final int PERMISSIONS_REQUEST_CODE = 100;
@@ -61,11 +63,13 @@ public class MainActivity extends AppCompatActivity  {
                 }
                 break;
             default:
+
                 break;
         }
     }
 
     private void getContentsInfo() {
+
 
         // 画像の情報を取得する
         ContentResolver resolver = getContentResolver();
@@ -76,7 +80,6 @@ public class MainActivity extends AppCompatActivity  {
                 null, // フィルタ用パラメータ
                 null // ソート (null ソートなし)
         );
-
         if (mCursor.moveToFirst()) {
             imageShow();
         }
@@ -87,15 +90,26 @@ public class MainActivity extends AppCompatActivity  {
 
     private void imageShow() {
 
-        int fieldIndex = mCursor.getColumnIndex(MediaStore.Images.Media._ID);
-        Long id = mCursor.getLong(fieldIndex);
-        Uri imageUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id);
 
-        Log.d("ANDROID", "URI : " + imageUri.toString());
-        ImageView imageView = (ImageView) findViewById(R.id.imageView);
-        imageView.setImageURI(imageUri);
+        if(mCursor.moveToFirst()) { //取得した結果に対するカーソルを先頭に移動させる という意味.成功したらtrueが返される.
+            int fieldIndex = mCursor.getColumnIndex(MediaStore.Images.Media._ID);
+            Long id = mCursor.getLong(fieldIndex);
+            Uri imageUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id);
+
+            Log.d("ANDROID", "URI : " + imageUri.toString());
+            ImageView imageView = (ImageView) findViewById(R.id.imageView);
+            imageView.setImageURI(imageUri);
+        }else{
+            showAlertDialog();
+            button1.setEnabled(false);
+            button2.setEnabled(false);
+            button3.setEnabled(false);
+
+        }
     }
+
     private void imageNext(){
+
         if(mCursor != null){
             if (mCursor.isLast()) {
                 mCursor.moveToFirst();
@@ -112,7 +126,7 @@ public class MainActivity extends AppCompatActivity  {
             //自動切り替え中
 
             mTimer.cancel();
-            mTimer = null; //停止している状態
+            mTimer = null; // Timerは使い捨てなのでnullを入れて間違って参照されたりしないようにしてる//停止している状態
             button2.setText("再生する");
             button1.setEnabled(true);
             button3.setEnabled(true);
@@ -182,6 +196,14 @@ public class MainActivity extends AppCompatActivity  {
             }
         });
 
+    }
+    private void showAlertDialog() {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setTitle("エラー");
+        alertDialogBuilder.setMessage("画像がありません");
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 
     @Override
