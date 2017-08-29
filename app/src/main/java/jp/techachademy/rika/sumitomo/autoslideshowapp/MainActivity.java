@@ -80,9 +80,9 @@ public class MainActivity extends AppCompatActivity  {
                 null, // フィルタ用パラメータ
                 null // ソート (null ソートなし)
         );
-        if (mCursor.moveToFirst()) {
+       // if (mCursor.moveToFirst()) {
             imageShow();
-        }
+       // }
 
     }
 
