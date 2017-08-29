@@ -80,9 +80,16 @@ public class MainActivity extends AppCompatActivity  {
                 null, // フィルタ用パラメータ
                 null // ソート (null ソートなし)
         );
-       // if (mCursor.moveToFirst()) {
+
+        if (mCursor.moveToFirst()) { //取得した結果に対するカーソルを先頭に移動させる という意味.成功したらtrueが返される.
             imageShow();
-       // }
+
+        }else{
+            showAlertDialog();
+            button1.setEnabled(false);
+            button2.setEnabled(false);
+            button3.setEnabled(false);
+        }
 
     }
 
@@ -90,22 +97,14 @@ public class MainActivity extends AppCompatActivity  {
 
     private void imageShow() {
 
+        int fieldIndex = mCursor.getColumnIndex(MediaStore.Images.Media._ID);
+        Long id = mCursor.getLong(fieldIndex);
+        Uri imageUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id);
 
-        if(mCursor.moveToFirst()) { //取得した結果に対するカーソルを先頭に移動させる という意味.成功したらtrueが返される.
-            int fieldIndex = mCursor.getColumnIndex(MediaStore.Images.Media._ID);
-            Long id = mCursor.getLong(fieldIndex);
-            Uri imageUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id);
+        Log.d("ANDROID", "URI : " + imageUri.toString());
+        ImageView imageView = (ImageView) findViewById(R.id.imageView);
+        imageView.setImageURI(imageUri);
 
-            Log.d("ANDROID", "URI : " + imageUri.toString());
-            ImageView imageView = (ImageView) findViewById(R.id.imageView);
-            imageView.setImageURI(imageUri);
-        }else{
-            showAlertDialog();
-            button1.setEnabled(false);
-            button2.setEnabled(false);
-            button3.setEnabled(false);
-
-        }
     }
 
     private void imageNext(){
